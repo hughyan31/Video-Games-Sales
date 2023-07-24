@@ -87,7 +87,7 @@ def barplot(data,x, y, ax=None):
     ax.set_xticklabels(data_value[x].astype(int) if x == 'Year' else data_value[x], rotation=90)
     return ax
     
-def stacked_barplot(data):
+def stackedBarplot(data):
     pivot_table = data.pivot_table(index='Year', columns='Genre', values='Rank', aggfunc='count', fill_value=0)
     plt.figure(figsize=(10, 6))
     pivot_table.plot(kind='bar', stacked=True, cmap='tab20')
@@ -107,7 +107,7 @@ def heatmap(data):
     plt.title('Number of Game Releases by Year and Genre (Heatmap)')
     plt.show()
 
-def plots(data,string):
+def salesPlots(data,string):
     fig, axs = plt.subplots(3, 2, figsize=(15, 15))
     plt.subplots_adjust(wspace=0.3, hspace=0.5)  # Adjust the spacing between subplots
     # Plot Global_Sales
@@ -132,8 +132,8 @@ countplot(df, 'Genre', 'y', ax=axs[0])
 countplot(df, 'Platform', 'y', top_n=10, ax=axs[1])
 plt.show()
 
-stacked_barplot(df)
+stackedBarplot(df)
 heatmap(df)
-plots(df,'Platform')
-plots(df,'Year')
-plots(df,'Genre')
+salesPlots(df,'Platform')
+salesPlots(df,'Year')
+salesPlots(df,'Genre')
