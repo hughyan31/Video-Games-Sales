@@ -10,7 +10,8 @@ import pandas_profiling as pp
 import matplotlib.pyplot as plt
 import seaborn as sns
 from tabulate import tabulate
-
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import OrdinalEncoder, StandardScaler
 
 np.random.seed(24)
 
@@ -226,4 +227,46 @@ plot_salesPlots(df,'Name')
 plot_pie(df)
 plot_line(df)
 best_game(df)
+
+data = df.copy()
+data = data[['Platform', 'Year','Genre', 'Publisher', 'Global_Sales']]
+categorical_features = ['Platform', 'Genre', 'Publisher']
+encoder = OrdinalEncoder()
+data[categorical_features] = encoder.fit_transform(data[categorical_features])
+
+y = data['Global_Sales']
+data = data.drop(columns='Global_Sales')
+
+X_train, X_test, y_train, y_test = train_test_split(data, y, test_size=0.2)
+
+from sklearn import svm
+from sklearn.neural_network import MLPRegressor
+from sklearn.linear_model import LinearRegression
+from sklearn.ensemble import RandomForestRegressor,HistGradientBoostingRegressor,GradientBoostingRegressor
+from sklearn.pipeline import Pipeline
+from sklearn.metrics import mean_squared_error
+
+#Since this is a regression task we compare the following methods
+classifiers = [
+    ('Linear Regression', LinearRegression()),
+    ('Random Forest', RandomForestRegressor()),
+    ('Neural Networks', MLPRegressor(max_iter=1000)),
+    ('Support Vector Regression', svm.SVR()),
+    ('Traditional Gradient Boosting', GradientBoostingRegressor()),
+    ('Histogram based Gradient Boosting', HistGradientBoostingRegressor())
+]
+
+best_model = None
+best_score = -np.inf
+for name, clf in classifiers:
+    pipeline = Pipeline([('scaler', StandardScaler()), ('clf', clf)])
+    pipeline.fit(X_train, y_train)
+    y_pred = pipeline.predict(X_test)
+    mse = mean_squared_error(y_test, y_pred)
+    print(f"{name} - Mean Squared Error: {mse:.4f}")
+    #A lower MSE value indicates better performance because it means that the model's predictions are closer to the actual target values.
+    if mse < best_score:
+        best_score = mse
+        best_model = pipeline
+
 
