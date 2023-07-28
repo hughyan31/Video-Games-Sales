@@ -4,6 +4,7 @@ Created on Fri Jul 14 18:49:10 2023
 
 @author: hughy
 """
+# Import required libraries
 import numpy as np
 import pandas as pd
 import pandas_profiling as pp
@@ -57,7 +58,6 @@ def colors_from_values(values, palette_name):
 
 
 # Function to create a barplot for a categorical column against a numerical column
-# The barplot shows the sum of the numerical column for each category in the specified column
 def barplot(data, x, y, ax=None):
     # Group the data by the 'x' column and calculate the sum of the 'y' column for each group
     data_value = data.groupby(by=[x])[y].sum()
@@ -332,6 +332,7 @@ plot_pie(df)
 plot_line(df)
 best_game(df)
 
+# Preproess
 # Create a copy of the dataframe for preprocessing
 data = df.copy()
 
@@ -350,11 +351,12 @@ X = data.drop(columns='Global_Sales')
 # Split the data into training and testing sets
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2,random_state=24)
 
+# ML
 # Define the classifiers and their corresponding models for evaluation
 classifiers = [
     ('Linear Regression', LinearRegression()),
     ('Random Forest', RandomForestRegressor(random_state=24)),
-    ('Neural Networks', MLPRegressor(max_iter=1000,random_state=24)),
+    ('Neural Networks', MLPRegressor(max_iter=1000, random_state=24)),
     ('Support Vector Regression', svm.SVR()),
     ('Traditional Gradient Boosting', GradientBoostingRegressor(random_state=24)),
     ('Histogram based Gradient Boosting', HistGradientBoostingRegressor(random_state=24))
@@ -370,7 +372,7 @@ for name, clf in classifiers:
     if name == 'Neural Networks' or name == 'Support Vector Regression':
         model = Pipeline([('scaler', StandardScaler()), ('clf', clf)])
     else:
-        model =  clf
+        model = clf
     model.fit(X_train, y_train)
     y_pred = model.predict(X_test)
     mse = mean_squared_error(y_test, y_pred)
@@ -380,25 +382,22 @@ for name, clf in classifiers:
         best_score = mse
         best_model = clf
         best_model_name = name
-        
-# Print the best model and its mean squared error        
+
+# Print the best model and its mean squared error
 print("Best Model:", best_model_name)
 print("Best Mean Squared Error:", best_score)
-    
-
 
 # Define the hyperparameter grid to search
-param_grid = {'loss': ['squared_error', 'absolute_error', 'poisson'],
-              'learning_rate': [0.05,0.1,0.2,0.3],
-              'max_iter': [80,100,120],
-              'max_leaf_nodes': [31,40,20],
-              'min_samples_leaf': [30,40,20]
+param_grid = {
+    'loss': ['squared_error', 'absolute_error', 'poisson'],
+    'learning_rate': [0.05, 0.1, 0.2, 0.3],
+    'max_iter': [80, 100, 120],
+    'max_leaf_nodes': [31, 40, 20],
+    'min_samples_leaf': [30, 40, 20]
 }
 
-#Calling hyperparameter tuning method
-#random(faster) search or an exhaustive search
-randomCV(best_model,param_grid,X_train,y_train,X_test,y_test)
-gridCV(best_model,param_grid,X_train,y_train,X_test,y_test)
-
-
+# Calling hyperparameter tuning methods
+# Random (faster) search or an exhaustive search
+randomCV(best_model, param_grid, X_train, y_train, X_test, y_test)
+gridCV(best_model, param_grid, X_train, y_train, X_test, y_test)
 
