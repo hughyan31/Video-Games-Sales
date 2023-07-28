@@ -20,43 +20,6 @@ from sklearn.pipeline import Pipeline
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score, explained_variance_score
 from sklearn.model_selection import GridSearchCV,RandomizedSearchCV
 
-# Load the data
-df = pd.read_csv("vgsales.csv")
-
-# EDA - Exploratory Data Analysis
-# Print the first few rows of the dataframe to get a sense of the data
-print(df.head())
-
-# Removing rows with missing values or after 2016 in the 'Year' column since some values are missingdf.dropna(subset=['Year'], inplace=True)
-df = df.loc[df['Year'] <= 2016]
-
-# Get the shape and information of the dataframe
-df.shape
-df.info()
-df.describe()
-
-# Generate a html report on the dataset (commented out for now)
-'''
-report = pp.ProfileReport(df)
-report.to_file('VGS_report.html')
-'''
-
-# Check for missing data in the dataframe
-print(df.isnull().sum())
-
-# Check the number of unique values in each column of the dataframe
-print(df.nunique())
-
-# Dealing with missing data in 'Publisher' column by changing NaN to 'unknown'
-df['Publisher'].fillna('unknown', inplace=True)
-print(df.isnull().sum())
-
-# Drop duplicates from the dataframe
-
-df.drop_duplicates(inplace= True)
-
-
-
 # Function to create a countplot for a categorical column
 def countplot(data, string, xy, top_n=None, ax=None):
     # Calculate the counts for each category in the specified column
@@ -323,6 +286,40 @@ def gridCV(model,grid,X_train,y_train,X_test,y_test):
     print("Explained Variance Score:", explained_variance)
     return y_pred
 
+# Load the data
+df = pd.read_csv("vgsales.csv")
+
+# EDA - Exploratory Data Analysis
+# Print the first few rows of the dataframe to get a sense of the data
+print(df.head())
+
+# Removing rows with missing values or after 2016 in the 'Year' column since some values are missingdf.dropna(subset=['Year'], inplace=True)
+df = df.loc[df['Year'] <= 2016]
+
+# Get the shape and information of the dataframe
+df.shape
+df.info()
+df.describe()
+
+# Generate a html report on the dataset (commented out for now)
+'''
+report = pp.ProfileReport(df)
+report.to_file('VGS_report.html')
+'''
+
+# Check for missing data in the dataframe
+print(df.isnull().sum())
+
+# Check the number of unique values in each column of the dataframe
+print(df.nunique())
+
+# Dealing with missing data in 'Publisher' column by changing NaN to 'unknown'
+df['Publisher'].fillna('unknown', inplace=True)
+print(df.isnull().sum())
+
+# Drop duplicates from the dataframe
+
+df.drop_duplicates(inplace= True)
 # Plotting
 plot_countplots(df)
 plot_stackedBarplot(df)
