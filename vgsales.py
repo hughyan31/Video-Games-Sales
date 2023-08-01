@@ -293,9 +293,6 @@ df = pd.read_csv("vgsales.csv")
 # Print the first few rows of the dataframe to get a sense of the data
 print(df.head())
 
-# Removing rows with missing values or after 2016 in the 'Year' column since some values are missingdf.dropna(subset=['Year'], inplace=True)
-df = df.loc[df['Year'] <= 2016]
-
 # Get the shape and information of the dataframe
 df.shape
 df.info()
@@ -313,8 +310,12 @@ print(df.isnull().sum())
 # Check the number of unique values in each column of the dataframe
 print(df.nunique())
 
+
+# Removing rows with missing values or after 2016 in the 'Year' column since some values are missing
+df.dropna(subset=['Year'], inplace=True)
+df = df.loc[df['Year'] <= 2016]
 # Dealing with missing data in 'Publisher' column by changing NaN to 'unknown'
-df['Publisher'].fillna('unknown', inplace=True)
+df.loc[df['Publisher'].isnull(), 'Publisher'] = 'unknown'
 print(df.isnull().sum())
 
 # Drop duplicates from the dataframe
@@ -332,7 +333,7 @@ plot_pie(df)
 plot_line(df)
 best_game(df)
 
-# Preproess
+# Training
 # Create a copy of the dataframe for preprocessing
 data = df.copy()
 
