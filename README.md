@@ -29,3 +29,6 @@ Other_Sales - Sales in the rest of the world (in millions)
 
 Global_Sales - Total worldwide sales.
 
+vgChartzfull.py contains the script to scrape data from VgChartz.com, credit to (https://medium.com/the-gaming-data-scientist/analysis-of-video-game-sales-7d078097399a), Modified a lil bit on URL and the output csv.
+
+vgsales_updated.csv is the new scraped data.
