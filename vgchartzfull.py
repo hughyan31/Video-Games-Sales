@@ -1,3 +1,9 @@
+''' 
+* Original from https://github.com/jeremyrchow/video_game_sales_data
+* Modified the url and applied some data cleaning parts to suit my usage
+*
+'''
+ 
 # if needed: pip install requests or conda install requests
 import requests
 from bs4 import BeautifulSoup
@@ -91,7 +97,13 @@ def scrape_all_vg_chartz_videogame_db(results_per_page):
     print('Total rows parsed = ', df.shape[0])
     return df.reset_index().drop(columns = 'index')
 
-
+def update_total_sales(row):
+    if row['total_sales'] == 'N/A':
+        regional_sales = [row['na_sales'], row['pal_sales'], row['japan_sales'], row['other_sales']]
+        if not all(pd.isna(x) for x in regional_sales):
+            total_sales = np.nansum(regional_sales)
+            return total_sales
+    return row['total_sales']
     
 # Run the code to scrape! I did 10,000 rows per page to speed things up.
 df=scrape_all_vg_chartz_videogame_db(10000)
@@ -123,14 +135,6 @@ df['other_sales'] = df['other_sales'].replace('N/A', 0)
 # Convert sales columns to float and remove 'm'
 sales_columns = ['na_sales', 'pal_sales', 'japan_sales', 'other_sales', 'total_sales']
 df[sales_columns] = df[sales_columns].replace({'m': ''}, regex=True).astype(float)
-
-def update_total_sales(row):
-    if row['total_sales'] == 'N/A':
-        regional_sales = [row['na_sales'], row['pal_sales'], row['japan_sales'], row['other_sales']]
-        if not all(pd.isna(x) for x in regional_sales):
-            total_sales = np.nansum(regional_sales)
-            return total_sales
-    return row['total_sales']
 
 # Apply the custom function to update 'total_sales' column
 df['total_sales'] = df.apply(update_total_sales, axis=1)
