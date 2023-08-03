@@ -31,6 +31,6 @@ Global_Sales - Total worldwide sales.
 
 The Kaggle also contains a script for data scrape. However, It wasn't able to run completely for me due to connection lost.
 
-vgChartzfull.py contains the script to scrape data from VgChartz.com, credit to (https://medium.com/the-gaming-data-scientist/analysis-of-video-game-sales-7d078097399a), Modified a lil bit on URL and the output csv.
+vgChartzfull.py contains the script to scrape data from VgChartz.com, credit to (https://medium.com/the-gaming-data-scientist/analysis-of-video-game-sales-7d078097399a), Modified a lil bit on URL and the output csv to fit my need.
 
 vgsales_updated.csv is the new scraped data, However genre is missing.
